@@ -1,0 +1,22 @@
+@config "../tailwind.config.ts";
+@import "tailwindcss";
+
+/* Base */
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+/* 🔧 FIX MODO OSCURO PARA <select> */
+select option {
+  background-color: #0f172a; /* slate-900 */
+  color: #e5e7eb;            /* gray-200 */
+}
+
+/* (opcional) mejora visual al hover */
+select option:hover {
+  background-color: #1e293b; /* slate-800 */
+}
