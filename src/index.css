@@ -8,15 +8,31 @@ html, body {
 
 body {
   margin: 0;
+  background: #070A12;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* 🔧 FIX MODO OSCURO PARA <select> */
+/* Scrollbar (suave, estilo pro) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.18) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.16);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+/* FIX MODO OSCURO PARA <select> */
 select option {
-  background-color: #0f172a; /* slate-900 */
-  color: #e5e7eb;            /* gray-200 */
+  background-color: #0b1020;
+  color: #e5e7eb;
 }
-
-/* (opcional) mejora visual al hover */
 select option:hover {
-  background-color: #1e293b; /* slate-800 */
+  background-color: #111a33;
 }
