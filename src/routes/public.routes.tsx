@@ -1,4 +1,3 @@
-import React from "react";
 import type { RouteObject } from "react-router-dom";
 import PublicLayout from "../layouts/PublicLayout";
 import PublicHome from "../pages/public/PublicHome";

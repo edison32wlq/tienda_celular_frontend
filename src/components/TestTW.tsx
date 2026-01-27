@@ -1,4 +1,4 @@
-import React, { useState, type JSX } from "react";
+import { useState, type JSX } from "react";
 
 export default function TestTW(): JSX.Element {
   const [mode, setMode] = useState<"dark" | "light">("dark");

@@ -181,7 +181,7 @@ export default function OrdenComprasPage() {
           id_celular: d.id_celular,
           cantidad: Number(d.cantidad),
           costo_unitario: Number(d.costo_unitario),
-          subtotal: Number(d.subtotal), // ✅ mandamos subtotal
+          subtotal: Number(d.subtotal),
         })),
       });
 
@@ -235,6 +235,25 @@ export default function OrdenComprasPage() {
           : "No se pudo cancelar la orden."
       );
     }
+  };
+
+  // ✅ NUEVO: Render de celulares comprados dentro de detalles (usa el "celular" que ya viene en el backend)
+  const renderDetalleCelulares = (o: OrdenCompra) => {
+    const dets = (o as any)?.detalles ?? [];
+    if (!Array.isArray(dets) || dets.length === 0) return [];
+
+    const max = 2; // muestra 2 y luego "+ X más..."
+    const lines: string[] = dets.slice(0, max).map((d: any) => {
+      const cel = d?.celular;
+      const nombre = cel
+        ? `${cel.marca} ${cel.modelo}`
+        : `ID: ${String(d?.id_celular || "").slice(0, 8)}...`;
+      const qty = Number(d?.cantidad ?? 0);
+      return `• ${nombre} x${qty}`;
+    });
+
+    if (dets.length > max) lines.push(`+ ${dets.length - max} más...`);
+    return lines;
   };
 
   return (
@@ -445,19 +464,37 @@ export default function OrdenComprasPage() {
                   <th className="py-3 text-left">Estado</th>
                   <th className="py-3 text-left">Total</th>
                   <th className="py-3 text-left">Usuario</th>
-                  <th className="py-3 text-left">Detalles</th>
+                  <th className="py-3 text-left">Celulares comprados</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((o) => (
-                  <tr key={o.id_orden_compra} className="border-b border-white/5">
-                    <td className="py-3">{String(o.fecha_emision).slice(0, 10)}</td>
-                    <td className="py-3">{o.estado}</td>
-                    <td className="py-3">${Number(o.total ?? 0).toFixed(2)}</td>
-                    <td className="py-3">{(o as any).usuario?.correo || o.id_usuario}</td>
-                    <td className="py-3">{o.detalles?.length ?? 0}</td>
-                  </tr>
-                ))}
+                {items.map((o) => {
+                  const lines = renderDetalleCelulares(o);
+
+                  return (
+                    <tr key={o.id_orden_compra} className="border-b border-white/5">
+                      <td className="py-3">{String(o.fecha_emision).slice(0, 10)}</td>
+                      <td className="py-3">{o.estado}</td>
+                      <td className="py-3">${Number(o.total ?? 0).toFixed(2)}</td>
+                      <td className="py-3">{(o as any).usuario?.correo || o.id_usuario}</td>
+
+                      {/* ✅ AQUÍ EL CAMBIO: ya no es un número, ahora lista */}
+                      <td className="py-3">
+                        {lines.length === 0 ? (
+                          <span className="text-white/50">—</span>
+                        ) : (
+                          <div className="space-y-1 text-white/80">
+                            {lines.map((txt, i) => (
+                              <div key={i} className={txt.startsWith("+") ? "text-xs text-white/50" : ""}>
+                                {txt}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
 
                 {items.length === 0 ? (
                   <tr>

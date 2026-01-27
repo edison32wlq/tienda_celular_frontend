@@ -7,6 +7,10 @@ import AdminUsuariosPage from "../pages/private/AdminUsuariosPage";
 import AdminRolesPage from "../pages/private/AdminRolesPage";
 import RequireRole from "./RequireRole";
 import PerfilClientePage from "../pages/private/PerfilClientePage";
+import ProveedoresPage from "../pages/private/ProveedoresPage";
+import CarritoPage from "../pages/private/CarritoPage";
+import ComprasPage from "../pages/private/ComprasPage";
+
 
 export const privateRoutes: RouteObject = {
   // ✅ IMPORTANTE: aquí NO va "/dashboard" porque ya está en appRoutes
@@ -17,6 +21,9 @@ export const privateRoutes: RouteObject = {
 
     // /dashboard/celulares
     { path: "celulares", element: <CelularesPage /> },
+    { path: "proveedores", element: <ProveedoresPage /> },
+    { path: "carrito", element: <CarritoPage /> },
+    { path: "compras", element: <ComprasPage /> },
 
     // /dashboard/orden-compras
     { path: "orden-compras", element: <OrdenComprasPage /> },

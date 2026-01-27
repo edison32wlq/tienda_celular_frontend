@@ -59,3 +59,10 @@ export async function updatePerfilCliente(
   const { data } = await api.put<SuccessResponse<PerfilCliente>>(`/perfilClientes/${id_cliente}`, payload);
   return data.data;
 }
+
+export async function getPerfilClienteByUsuarioId(id_usuario: string) {
+  // Trae varios (50) y busca el que coincide con id_usuario
+  const res = await getPerfilClientes({ page: 1, limit: 50 });
+  const found = res.items.find((p) => p.id_usuario === id_usuario);
+  return found || null;
+}

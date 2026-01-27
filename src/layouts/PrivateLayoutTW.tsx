@@ -1,4 +1,4 @@
-import React, { useState, type JSX } from "react";
+import { useState, type JSX } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -110,6 +110,11 @@ export default function PrivateLayoutTW(): JSX.Element {
               label="Mi Perfil"
               onClick={() => setOpen(false)}
             />
+            <Item to="/dashboard/carrito" label="Carrito" onClick={() => setOpen(false)} />
+            {role === "EMPLEADO" || role === "ADMIN" ? (
+              <Item to="/dashboard/proveedores" label="Proveedores" onClick={() => setOpen(false)} />
+            ) : null}
+
 
             {/* ✅ ADMIN */}
             {role === "ADMIN" ? (
@@ -135,6 +140,11 @@ export default function PrivateLayoutTW(): JSX.Element {
                 label="Ordenes de Compra"
                 onClick={() => setOpen(false)}
               />
+            ) : null}
+
+            {/* ✅ USER */}
+            {role === "USER" ? (
+              <Item to="/dashboard/compras" label="Compras" onClick={() => setOpen(false)} />
             ) : null}
           </div>
         </aside>

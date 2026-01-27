@@ -19,6 +19,7 @@ export type Celular = {
 export type CelularDto = Celular;
 
 export type Paginated<T> = {
+  data: any;
   items: T[];
   meta: {
     totalItems: number;
