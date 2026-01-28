@@ -128,9 +128,6 @@ export default function PerfilClientePage() {
       <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
         <div className="px-8 py-7 border-b border-white/10">
           <h1 className="text-3xl font-semibold tracking-tight">Mi Perfil</h1>
-          <p className="mt-2 text-sm text-white/60 leading-relaxed">
-            Aquí puedes guardar y actualizar tu información básica. No se permite borrar.
-          </p>
         </div>
       </div>
 
@@ -212,11 +209,6 @@ export default function PerfilClientePage() {
                   {saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Guardar perfil"}
                 </button>
 
-                {isEdit ? (
-                  <p className="text-xs text-white/45">
-                    * No existe botón “Eliminar” porque el perfil es único por usuario.
-                  </p>
-                ) : null}
               </form>
             </div>
           </div>

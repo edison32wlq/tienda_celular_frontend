@@ -27,3 +27,57 @@ select option {
 select option:hover {
   background-color: #f1f5f9;
 }
+
+/* Tabla base para Kardex */
+.table-kardex {
+  background-color: #1f2937; /* Fondo oscuro para las tablas */
+  border-radius: 0.5rem;  /* Bordes redondeados */
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Estilo para los encabezados de tabla */
+.table-kardex th {
+  background-color: #082582; /* Azul neón oscuro */
+  color: #ffffff;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: bold;
+  border-bottom: 2px solid #154a9e; /* Borde más brillante */
+  box-shadow: 0 4px 6px rgba(13, 58, 130, 0.5); /* Sombra sutil para el efecto neón */
+}
+
+/* Estilo para las celdas de la tabla */
+.table-kardex td {
+  background-color: #374151; /* Gris oscuro para las celdas */
+  color: white;
+  padding: 12px 16px;
+  border-bottom: 1px solid #2d3748;
+  text-align: left;
+}
+
+/* Estilo hover en las filas */
+.table-kardex tr:hover {
+  background-color: #4b5563; /* Efecto hover con gris más claro */
+}
+
+/* Fila impar con diferente color de fondo */
+.table-kardex tr:nth-child(odd) {
+  background-color: #2d3748;
+}
+
+/* Estilo para la tabla de Compras (verde neón) */
+.table-kardex .table-kardex-green th {
+  background-color: #087550; /* Verde neón oscuro */
+  color: #ffffff;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: bold;
+  border-bottom: 2px solid #0b5137; /* Borde más brillante */
+  box-shadow: 0 4px 6px rgba(17, 121, 87, 0.5); /* Sombra sutil para el efecto neón */
+}
+
+/* Ajustes en la fila cuando no hay datos */
+.table-kardex tbody tr td {
+  text-align: center;
+}

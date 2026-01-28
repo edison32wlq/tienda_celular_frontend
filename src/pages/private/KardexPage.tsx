@@ -57,48 +57,44 @@ export default function KardexPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Kardex</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-white">Kardex</h1>
 
       {loading ? (
         <div className="flex justify-center py-10">
-          <div className="w-8 h-8 border-t-4 border-blue-600 rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-t-4 border-blue-400 rounded-full animate-spin"></div>
         </div>
       ) : error ? (
-        <div className="mb-4 p-4 bg-red-500 text-white rounded-lg">{error}</div>
+        <div className="mb-4 p-4 bg-red-500 text-white rounded-lg text-center">{error}</div>
       ) : (
         <div>
           {noDataMessage ? (
-            <div className="mb-4 p-4 bg-yellow-500 text-white rounded-lg">{noDataMessage}</div>
+            <div className="mb-4 p-4 bg-yellow-500 text-white rounded-lg text-center">{noDataMessage}</div>
           ) : (
             <div>
               {/* Tabla de Ventas */}
-              <h2 className="text-xl font-semibold mb-4">Movimientos de Venta (Facturas)</h2>
-              <table className="min-w-full table-auto border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Fecha</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Tipo Movimiento</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Origen</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Productos Comprados/Vendidos</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Total</th>
+              <h2 className="text-2xl font-semibold mb-4 text-white">Movimientos de Venta (Facturas)</h2>
+              <table className="min-w-full table-auto border-collapse table-dark text-white rounded-lg shadow-md">
+                <thead className="bg-blue-800">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Fecha</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Tipo Movimiento</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Origen</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Productos Comprados/Vendidos</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Total</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="text-sm">
                   {facturas.map((item, index) => {
                     const detalles = item.detalles || []; // Asegúrate de que "detalles" sea un array
                     const total = item.total || 0; // Asegúrate de que sea un número
 
                     return (
-                      <tr key={index} className="border-b">
-                        <td className="px-4 py-2 text-sm">{new Date(item.fecha_emision).toLocaleDateString()}</td>
-                        <td className="px-4 py-2 text-sm">Salida</td>
-                        <td className="px-4 py-2 text-sm">Venta</td>
-                        <td className="px-4 py-2 text-sm">
-                          {renderDetalleCelulares(detalles)} {/* Mostrar los productos vendidos */}
-                        </td>
-                        <td className="px-4 py-2 text-sm">
-                          {safeTotal(total)} {/* Asegurarse de que total sea un número */}
-                        </td>
+                      <tr key={index} className="border-b hover:bg-gray-700">
+                        <td className="px-6 py-3">{new Date(item.fecha_emision).toLocaleDateString()}</td>
+                        <td className="px-6 py-3">Salida</td>
+                        <td className="px-6 py-3">Venta</td>
+                        <td className="px-6 py-3">{renderDetalleCelulares(detalles)}</td>
+                        <td className="px-6 py-3">{safeTotal(total)}</td>
                       </tr>
                     );
                   })}
@@ -106,33 +102,29 @@ export default function KardexPage() {
               </table>
 
               {/* Tabla de Compras */}
-              <h2 className="text-xl font-semibold mb-4 mt-6">Movimientos de Compra (Ordenes de Compra)</h2>
-              <table className="min-w-full table-auto border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Fecha</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Tipo Movimiento</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Origen</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Productos Comprados/Vendidos</th>
-                    <th className="px-4 py-2 text-left text-sm font-semibold">Total</th>
+              <h2 className="text-2xl font-semibold mb-4 mt-6 text-white">Movimientos de Compra (Ordenes de Compra)</h2>
+              <table className="min-w-full table-auto border-collapse table-dark text-white rounded-lg shadow-md">
+                <thead className="bg-green-800">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Fecha</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Tipo Movimiento</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Origen</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Productos Comprados/Vendidos</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Total</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="text-sm">
                   {ordenes.map((item, index) => {
                     const detalles = item.detalles || []; // Asegúrate de que "detalles" sea un array
                     const total = item.total || 0; // Asegúrate de que sea un número
 
                     return (
-                      <tr key={index} className="border-b">
-                        <td className="px-4 py-2 text-sm">{new Date(item.fecha_emision).toLocaleDateString()}</td>
-                        <td className="px-4 py-2 text-sm">Entrada</td>
-                        <td className="px-4 py-2 text-sm">Compra Proveedor</td>
-                        <td className="px-4 py-2 text-sm">
-                          {renderDetalleCelulares(detalles)} {/* Mostrar los productos comprados */}
-                        </td>
-                        <td className="px-4 py-2 text-sm">
-                          {safeTotal(total)} {/* Asegurarse de que total sea un número */}
-                        </td>
+                      <tr key={index} className="border-b hover:bg-gray-700">
+                        <td className="px-6 py-3">{new Date(item.fecha_emision).toLocaleDateString()}</td>
+                        <td className="px-6 py-3">Entrada</td>
+                        <td className="px-6 py-3">Compra Proveedor</td>
+                        <td className="px-6 py-3">{renderDetalleCelulares(detalles)}</td>
+                        <td className="px-6 py-3">{safeTotal(total)}</td>
                       </tr>
                     );
                   })}

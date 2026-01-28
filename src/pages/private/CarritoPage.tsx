@@ -387,18 +387,6 @@ export default function CarritoPage() {
           <div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="text-sm text-white/65">
               <div>
-                <span className="text-white/45">id_usuario:</span>{" "}
-                <span className="font-semibold text-white/80">{String(idUsuario || "—")}</span>
-              </div>
-              <div>
-                <span className="text-white/45">id_cliente:</span>{" "}
-                <span className="font-semibold text-white/80">{idCliente || "—"}</span>
-              </div>
-              <div>
-                <span className="text-white/45">Carrito:</span>{" "}
-                <span className="font-semibold text-white/80">{carrito?.id_carrito || "—"}</span>
-              </div>
-              <div>
                 <span className="text-white/45">Estado:</span>{" "}
                 <span className="font-semibold text-white/80">{carrito?.estado || "—"}</span>
               </div>
