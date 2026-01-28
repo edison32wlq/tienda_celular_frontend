@@ -140,6 +140,15 @@ export default function PublicCelularDetail(): JSX.Element {
               {celular.descripcion}
             </p>
           </div>
+
+          <div className="mt-6 text-center">
+            <button
+              className="w-full rounded-xl bg-blue-600 py-2 font-semibold text-white hover:bg-blue-500 transition"
+              onClick={() => alert("Agregado al carrito")} // Cambia este handler según lógica de carrito
+            >
+              Agregar al carrito
+            </button>
+          </div>
         </div>
       </div>
     </div>
