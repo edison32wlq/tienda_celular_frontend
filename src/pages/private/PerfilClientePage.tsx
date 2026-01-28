@@ -46,8 +46,6 @@ export default function PerfilClientePage() {
       setLoading(true);
       setError(null);
 
-      // ⚠️ Como tu backend no tiene endpoint "mi perfil", traemos lista y filtramos.
-      // Para que no explote si hay muchos, usa limit alto (100 o 200).
       const res = await getPerfilClientes({ page: 1, limit: 200 });
 
       const found = res.items.find((p) => p.id_usuario === userId) || null;
@@ -98,7 +96,6 @@ export default function PerfilClientePage() {
       setSaving(true);
 
       if (!perfil) {
-        // ✅ crear 1 vez
         const created = await createPerfilCliente({
           id_usuario: userId,
           cedula: form.cedula.trim(),
@@ -108,7 +105,6 @@ export default function PerfilClientePage() {
         setPerfil(created);
         setOk("Perfil creado ✅");
       } else {
-        // ✅ actualizar
         const updated = await updatePerfilCliente(perfil.id_cliente, {
           cedula: form.cedula.trim(),
           telefono: form.telefono.trim(),
@@ -118,8 +114,6 @@ export default function PerfilClientePage() {
         setOk("Perfil actualizado ✅");
       }
     } catch (e: any) {
-      // tu backend cuando ya existe devuelve null y controller lanza 500
-      // aquí lo mostramos más humano:
       const msg =
         e?.response?.data?.message ||
         "No se pudo guardar. (Si ya existe perfil, solo se puede actualizar).";
@@ -130,91 +124,101 @@ export default function PerfilClientePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h1 className="text-2xl font-extrabold">Mi Perfil</h1>
-        <p className="mt-1 text-sm text-white/60">
-          Aquí puedes guardar y actualizar tu información básica. No se permite borrar.
-        </p>
+    <div className="mx-auto w-full max-w-5xl space-y-6">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+        <div className="px-8 py-7 border-b border-white/10">
+          <h1 className="text-3xl font-semibold tracking-tight">Mi Perfil</h1>
+          <p className="mt-2 text-sm text-white/60 leading-relaxed">
+            Aquí puedes guardar y actualizar tu información básica. No se permite borrar.
+          </p>
+        </div>
       </div>
 
       {loading ? (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft px-8 py-6 text-white/70">
           Cargando...
         </div>
       ) : (
         <>
           {error && (
-            <div className="rounded-2xl border border-red-400/20 bg-red-400/10 p-4 text-red-200">
+            <div className="rounded-2xl border border-red-400/20 bg-red-400/10 px-6 py-5 text-red-200">
               ❌ {error}
             </div>
           )}
 
           {ok && (
-            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-emerald-200">
+            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-6 py-5 text-emerald-200">
               ✅ {ok}
             </div>
           )}
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-lg font-bold">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+            <div className="px-8 pt-7 pb-5 border-b border-white/10 flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">
                 {isEdit ? "Actualizar información" : "Completa tu información"}
               </h2>
-              <span className="text-xs rounded-full border border-white/10 px-3 py-1 text-white/70">
+              <span className="text-xs rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 text-white/65">
                 Usuario: {userId.slice(0, 8)}...
               </span>
             </div>
 
-            <form onSubmit={onSubmit} className="mt-4 space-y-4">
-              <div className="grid gap-3 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-semibold text-white/70">Cédula</label>
-                  <input
-                    className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
-                               focus:ring-2 focus:ring-blue-600/40"
-                    value={form.cedula}
-                    onChange={(e) => onChange("cedula", e.target.value)}
-                    placeholder="0102030405"
-                  />
+            <div className="px-8 py-7">
+              <form onSubmit={onSubmit} className="space-y-5">
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div>
+                    <label className="text-xs font-semibold tracking-wide text-white/60">
+                      Cédula
+                    </label>
+                    <input
+                      className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
+                                 placeholder:text-white/30 focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                      value={form.cedula}
+                      onChange={(e) => onChange("cedula", e.target.value)}
+                      placeholder="0102030405"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold tracking-wide text-white/60">
+                      Teléfono
+                    </label>
+                    <input
+                      className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
+                                 placeholder:text-white/30 focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                      value={form.telefono}
+                      onChange={(e) => onChange("telefono", e.target.value)}
+                      placeholder="0999999999"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="text-xs font-semibold tracking-wide text-white/60">
+                      Dirección
+                    </label>
+                    <input
+                      className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
+                                 placeholder:text-white/30 focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                      value={form.direccion}
+                      onChange={(e) => onChange("direccion", e.target.value)}
+                      placeholder="Av..., Calle..., Nro..., Referencia..."
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="text-sm font-semibold text-white/70">Teléfono</label>
-                  <input
-                    className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
-                               focus:ring-2 focus:ring-blue-600/40"
-                    value={form.telefono}
-                    onChange={(e) => onChange("telefono", e.target.value)}
-                    placeholder="0999999999"
-                  />
-                </div>
+                <button
+                  disabled={saving}
+                  className="h-11 w-full rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition disabled:opacity-60"
+                >
+                  {saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Guardar perfil"}
+                </button>
 
-                <div className="md:col-span-2">
-                  <label className="text-sm font-semibold text-white/70">Dirección</label>
-                  <input
-                    className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
-                               focus:ring-2 focus:ring-blue-600/40"
-                    value={form.direccion}
-                    onChange={(e) => onChange("direccion", e.target.value)}
-                    placeholder="Av..., Calle..., Nro..., Referencia..."
-                  />
-                </div>
-              </div>
-
-              <button
-                disabled={saving}
-                className="h-11 w-full rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition disabled:opacity-60"
-              >
-                {saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Guardar perfil"}
-              </button>
-
-              {isEdit ? (
-                <p className="text-xs text-white/50">
-                  * No existe botón “Eliminar” porque el perfil es único por usuario.
-                </p>
-              ) : null}
-            </form>
+                {isEdit ? (
+                  <p className="text-xs text-white/45">
+                    * No existe botón “Eliminar” porque el perfil es único por usuario.
+                  </p>
+                ) : null}
+              </form>
+            </div>
           </div>
         </>
       )}

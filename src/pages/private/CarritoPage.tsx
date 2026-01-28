@@ -335,304 +335,356 @@ export default function CarritoPage() {
 
   const perfilIncompleto = perfilChecked && !perfil;
 
+  // ✅ checkout: subtotal/iva/total (solo visual, no cambia lógica)
+  const subtotal = total;
+  const iva = subtotal * 0.12;
+  const totalFinal = subtotal + iva;
+
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-6xl space-y-6">
       {/* Header */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h1 className="text-2xl font-extrabold">Carrito</h1>
-        <p className="mt-1 text-sm text-white/60">
-          Agrega productos al carrito y confirma la compra (por ahora sin factura).
-        </p>
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+        <div className="px-8 pt-7 pb-5 border-b border-white/10">
+          <h1 className="text-3xl font-semibold tracking-tight">Carrito</h1>
+          <p className="mt-2 text-sm text-white/60 leading-relaxed">
+            Agrega productos, ajusta cantidades y confirma la compra.
+          </p>
+        </div>
 
-        {error && (
-          <div className="mt-4 rounded-xl border border-red-400/20 bg-red-400/10 p-3 text-red-200">
-            ❌ {error}
-          </div>
-        )}
-
-        {perfilIncompleto && (
-          <div className="mt-4 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-yellow-100">
-            <div className="font-bold">⚠️ Completa tu Perfil Cliente</div>
-            <div className="mt-1 text-sm text-yellow-100/80">
-              Para usar el carrito necesitas llenar tu perfil (cédula, teléfono, dirección).
+        <div className="px-8 py-6">
+          {error && (
+            <div className="mb-4 rounded-2xl border border-red-400/20 bg-red-400/10 px-5 py-4 text-red-200">
+              ❌ {error}
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                className="rounded-xl bg-yellow-400/90 px-4 py-2 font-semibold text-slate-950 hover:bg-yellow-400"
-                type="button"
-                onClick={() => navigate("/dashboard/mi-perfil")}
-              >
-                Completar mi perfil
-              </button>
+          )}
 
+          {perfilIncompleto && (
+            <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-6 py-5 text-yellow-100">
+              <div className="font-semibold tracking-tight">⚠️ Completa tu Perfil Cliente</div>
+              <div className="mt-1 text-sm text-yellow-100/80">
+                Para usar el carrito necesitas llenar tu perfil (cédula, teléfono, dirección).
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  className="rounded-xl bg-yellow-400/90 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-yellow-400 transition"
+                  type="button"
+                  onClick={() => navigate("/dashboard/mi-perfil")}
+                >
+                  Completar mi perfil
+                </button>
+
+                <button
+                  className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06] transition"
+                  type="button"
+                  onClick={() => loadAll()}
+                >
+                  Ya lo completé, refrescar
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div className="text-sm text-white/65">
+              <div>
+                <span className="text-white/45">id_usuario:</span>{" "}
+                <span className="font-semibold text-white/80">{String(idUsuario || "—")}</span>
+              </div>
+              <div>
+                <span className="text-white/45">id_cliente:</span>{" "}
+                <span className="font-semibold text-white/80">{idCliente || "—"}</span>
+              </div>
+              <div>
+                <span className="text-white/45">Carrito:</span>{" "}
+                <span className="font-semibold text-white/80">{carrito?.id_carrito || "—"}</span>
+              </div>
+              <div>
+                <span className="text-white/45">Estado:</span>{" "}
+                <span className="font-semibold text-white/80">{carrito?.estado || "—"}</span>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
               <button
-                className="rounded-xl border border-white/10 px-4 py-2 hover:bg-white/5"
+                className="h-11 rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm font-medium text-white/80 hover:bg-white/[0.06] transition"
                 type="button"
                 onClick={() => loadAll()}
               >
-                Ya lo completé, refrescar
+                Refrescar
               </button>
             </div>
           </div>
-        )}
-
-        <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="text-sm text-white/70">
-            <div>
-              <span className="text-white/50">id_usuario:</span>{" "}
-              <span className="font-semibold">{String(idUsuario || "—")}</span>
-            </div>
-            <div>
-              <span className="text-white/50">id_cliente:</span>{" "}
-              <span className="font-semibold">{idCliente || "—"}</span>
-            </div>
-            <div>
-              <span className="text-white/50">Carrito:</span>{" "}
-              <span className="font-semibold">{carrito?.id_carrito || "—"}</span>
-            </div>
-            <div>
-              <span className="text-white/50">Estado:</span>{" "}
-              <span className="font-semibold">{carrito?.estado || "—"}</span>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              className="h-11 rounded-xl border border-white/10 px-4 hover:bg-white/5"
-              type="button"
-              onClick={() => loadAll()}
-            >
-              Refrescar
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Add product */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">Añadir producto</h2>
-          {perfilIncompleto ? (
-            <span className="text-sm text-yellow-200/80">⚠️ Completa tu perfil primero</span>
-          ) : null}
+      {/* ✅ Checkout layout: izquierda (tabla) + derecha (resumen + add) */}
+      <div className="grid gap-6 lg:grid-cols-12">
+        {/* Left */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Add product */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+            <div className="px-8 pt-7 pb-5 border-b border-white/10 flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Añadir producto</h2>
+              {perfilIncompleto ? (
+                <span className="text-sm text-yellow-200/80">⚠️ Completa tu perfil primero</span>
+              ) : null}
+            </div>
+
+            <div className="px-8 py-7">
+              <form onSubmit={onAgregarProducto} className="grid gap-5 md:grid-cols-3">
+                <div className="md:col-span-2">
+                  <label className="text-xs font-semibold tracking-wide text-white/60">
+                    Celular
+                  </label>
+                  <select
+                    className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
+                               focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                    value={addForm.id_celular}
+                    onChange={(e) =>
+                      setAddForm((p) => ({ ...p, id_celular: e.target.value }))
+                    }
+                    required
+                    disabled={perfilIncompleto}
+                  >
+                    <option value="">Selecciona un celular</option>
+                    {celulares.map((c) => (
+                      <option key={c.id_celular} value={c.id_celular}>
+                        {c.marca} {c.modelo} — ${Number(c.precio_venta).toFixed(2)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold tracking-wide text-white/60">
+                    Cantidad
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
+                               placeholder:text-white/30 focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                    value={addForm.cantidad}
+                    onChange={(e) =>
+                      setAddForm((p) => ({ ...p, cantidad: Number(e.target.value) }))
+                    }
+                    required
+                    disabled={perfilIncompleto}
+                  />
+                </div>
+
+                <div className="md:col-span-3">
+                  <button
+                    className="h-11 w-full rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition disabled:opacity-40"
+                    disabled={perfilIncompleto}
+                  >
+                    Agregar al carrito
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {/* Table productos */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+            <div className="px-8 pt-7 pb-5 border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Productos en el carrito</h2>
+
+              <div className="flex items-center gap-2">
+                <select
+                  className="h-10 rounded-xl border border-white/10 bg-white/[0.02] px-3 text-sm text-white/85 outline-none
+                             focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                  value={limit}
+                  onChange={(e) => {
+                    setPage(1);
+                    setLimit(Number(e.target.value));
+                  }}
+                  disabled={perfilIncompleto}
+                >
+                  {[5, 10, 20, 50].map((n) => (
+                    <option key={n} value={n}>
+                      {n} / pág
+                    </option>
+                  ))}
+                </select>
+
+                <button
+                  className="h-10 rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm font-medium text-white/80 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                  disabled={perfilIncompleto || items.length === 0}
+                  type="button"
+                  onClick={() => setConfirmCompraOpen(true)}
+                >
+                  Comprar
+                </button>
+              </div>
+            </div>
+
+            <div className="px-8 py-7">
+              {loading ? (
+                <p className="text-white/60">Cargando...</p>
+              ) : (
+                <div className="overflow-auto rounded-xl border border-white/10">
+                  <table className="min-w-[860px] w-full text-sm">
+                    <thead className="text-white/60 bg-white/[0.02]">
+                      <tr className="border-b border-white/10">
+                        <th className="py-3 px-4 text-left font-medium">Producto</th>
+                        <th className="py-3 px-4 text-left font-medium">Precio</th>
+                        <th className="py-3 px-4 text-left font-medium">Cantidad</th>
+                        <th className="py-3 px-4 text-left font-medium">Subtotal</th>
+                        <th className="py-3 px-4 text-right font-medium">Acciones</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {items.map((it) => {
+                        const nombre = getNombreCelular(it);
+
+                        const unit = Number(it.precio_unitario);
+                        const qty = Number(it.cantidad);
+                        const sub = unit * qty;
+
+                        return (
+                          <tr key={it.id_producto_carrito} className="border-b border-white/5">
+                            <td className="py-4 px-4">
+                              <div className="font-semibold text-white/90">{nombre}</div>
+                            </td>
+
+                            <td className="py-4 px-4 tabular-nums text-white/85">
+                              ${unit.toFixed(2)}
+                            </td>
+
+                            <td className="py-4 px-4">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                                  onClick={() => onCambiarCantidad(it, qty - 1)}
+                                  type="button"
+                                  disabled={perfilIncompleto}
+                                >
+                                  −
+                                </button>
+
+                                <input
+                                  type="number"
+                                  min={1}
+                                  className="h-10 w-24 rounded-xl border border-white/10 bg-white/[0.02] px-3 text-sm text-white/90 outline-none
+                                             focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                                  value={qty}
+                                  onChange={(e) =>
+                                    onCambiarCantidad(it, Number(e.target.value))
+                                  }
+                                  disabled={perfilIncompleto}
+                                />
+
+                                <button
+                                  className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                                  onClick={() => onCambiarCantidad(it, qty + 1)}
+                                  type="button"
+                                  disabled={perfilIncompleto}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </td>
+
+                            <td className="py-4 px-4 tabular-nums text-white/85">
+                              ${sub.toFixed(2)}
+                            </td>
+
+                            <td className="py-4 px-4 text-right">
+                              <button
+                                className="rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm font-medium text-red-200 hover:bg-red-400/20 disabled:opacity-40 transition"
+                                onClick={() => askDelete(it)}
+                                type="button"
+                                disabled={perfilIncompleto}
+                              >
+                                Eliminar
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+
+                      {items.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="py-10 text-center text-white/60">
+                            No hay productos en el carrito.
+                          </td>
+                        </tr>
+                      ) : null}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              <div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="text-sm text-white/60">
+                  Página <span className="text-white/85 font-semibold">{page}</span> /{" "}
+                  <span className="text-white/85 font-semibold">{totalPages}</span>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                    disabled={perfilIncompleto || page <= 1}
+                    onClick={() => setPage((p) => p - 1)}
+                    type="button"
+                  >
+                    ←
+                  </button>
+                  <button
+                    className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                    disabled={perfilIncompleto || page >= totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                    type="button"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <form onSubmit={onAgregarProducto} className="mt-4 grid gap-3 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <label className="text-sm font-semibold text-white/70">Celular</label>
-            <select
-              className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-3 outline-none"
-              value={addForm.id_celular}
-              onChange={(e) => setAddForm((p) => ({ ...p, id_celular: e.target.value }))}
-              required
-              disabled={perfilIncompleto}
-            >
-              <option value="">Selecciona un celular</option>
-              {celulares.map((c) => (
-                <option key={c.id_celular} value={c.id_celular}>
-                  {c.marca} {c.modelo} — ${Number(c.precio_venta).toFixed(2)}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Right: resumen */}
+        <div className="lg:col-span-4">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft p-6 lg:sticky lg:top-24">
+            <div className="text-lg font-semibold tracking-tight">Resumen</div>
 
-          <div>
-            <label className="text-sm font-semibold text-white/70">Cantidad</label>
-            <input
-              type="number"
-              min={1}
-              className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
-                         focus:ring-2 focus:ring-blue-600/40"
-              value={addForm.cantidad}
-              onChange={(e) => setAddForm((p) => ({ ...p, cantidad: Number(e.target.value) }))}
-              required
-              disabled={perfilIncompleto}
-            />
-          </div>
+            <div className="mt-5 space-y-3 text-sm">
+              <div className="flex items-center justify-between text-white/70">
+                <span>Subtotal</span>
+                <span className="tabular-nums text-white/85">${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-white/70">
+                <span>IVA (12%)</span>
+                <span className="tabular-nums text-white/85">${iva.toFixed(2)}</span>
+              </div>
 
-          <div className="md:col-span-3">
-            <button
-              className="h-11 w-full rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition disabled:opacity-40"
-              disabled={perfilIncompleto}
-            >
-              Agregar al carrito
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* Table productos */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-xl font-bold">Productos en el carrito</h2>
-
-          <div className="flex items-center gap-2">
-            <select
-              className="h-11 rounded-xl border border-white/10 bg-transparent px-3 outline-none"
-              value={limit}
-              onChange={(e) => {
-                setPage(1);
-                setLimit(Number(e.target.value));
-              }}
-              disabled={perfilIncompleto}
-            >
-              {[5, 10, 20, 50].map((n) => (
-                <option key={n} value={n}>
-                  {n} / pág
-                </option>
-              ))}
-            </select>
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                <span className="text-white/80 font-semibold">Total</span>
+                <span className="tabular-nums text-white font-semibold text-xl">
+                  ${totalFinal.toFixed(2)}
+                </span>
+              </div>
+            </div>
 
             <button
-              className="h-11 rounded-xl border border-white/10 px-4 hover:bg-white/5 disabled:opacity-40"
+              className="mt-6 h-11 w-full rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition disabled:opacity-40"
               disabled={perfilIncompleto || items.length === 0}
               type="button"
               onClick={() => setConfirmCompraOpen(true)}
             >
-              Comprar
+              Confirmar compra
             </button>
-          </div>
-        </div>
 
-        {loading ? (
-          <p className="mt-3 text-white/60">Cargando...</p>
-        ) : (
-          <div className="mt-4 overflow-auto">
-            <table className="min-w-[1000px] w-full text-sm">
-              <thead className="text-white/60">
-                <tr className="border-b border-white/10">
-                  <th className="py-3 text-left">Celular</th>
-                  <th className="py-3 text-left">Precio unit.</th>
-                  <th className="py-3 text-left">Cantidad</th>
-                  <th className="py-3 text-left">Subtotal</th>
-                  <th className="py-3 text-right">Acciones</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {items.map((it) => {
-                  const nombre = getNombreCelular(it);
-
-                  const unit = Number(it.precio_unitario);
-                  const qty = Number(it.cantidad);
-                  const sub = unit * qty;
-
-                  return (
-                    <tr key={it.id_producto_carrito} className="border-b border-white/5">
-                      <td className="py-3">
-                        {/* ✅ CAMBIO: ahora siempre muestra NOMBRE */}
-                        <div className="font-semibold">{nombre}</div>
-
-                        {/* ✅ CAMBIO: ya NO mostramos ID. Mostramos un detalle bonito */}
-                        <div className="text-xs text-white/50">
-                          {(() => {
-                            const celFromItem = (it as any)?.celular;
-                            const celFromCatalog = celulares.find((c) => c.id_celular === it.id_celular);
-
-                            const cel = celFromItem || celFromCatalog;
-
-                            if (!cel) return "—";
-
-                            const color = (cel as any)?.color ? `Color: ${(cel as any).color}` : "";
-                            const al = (cel as any)?.almacenamiento
-                              ? `Alm: ${(cel as any).almacenamiento}`
-                              : "";
-                            const extra = [color, al].filter(Boolean).join(" • ");
-
-                            return extra || "—";
-                          })()}
-                        </div>
-                      </td>
-
-                      <td className="py-3">${unit.toFixed(2)}</td>
-
-                      <td className="py-3">
-                        <div className="flex items-center gap-2">
-                          <button
-                            className="rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5 disabled:opacity-40"
-                            onClick={() => onCambiarCantidad(it, qty - 1)}
-                            type="button"
-                            disabled={perfilIncompleto}
-                          >
-                            −
-                          </button>
-
-                          <input
-                            type="number"
-                            min={1}
-                            className="h-11 w-24 rounded-xl border border-white/10 bg-transparent px-3 outline-none"
-                            value={qty}
-                            onChange={(e) => onCambiarCantidad(it, Number(e.target.value))}
-                            disabled={perfilIncompleto}
-                          />
-
-                          <button
-                            className="rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5 disabled:opacity-40"
-                            onClick={() => onCambiarCantidad(it, qty + 1)}
-                            type="button"
-                            disabled={perfilIncompleto}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </td>
-
-                      <td className="py-3">${sub.toFixed(2)}</td>
-
-                      <td className="py-3 text-right">
-                        <button
-                          className="rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2 text-red-200 hover:bg-red-400/20 disabled:opacity-40"
-                          onClick={() => askDelete(it)}
-                          type="button"
-                          disabled={perfilIncompleto}
-                        >
-                          Eliminar
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-
-                {items.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="py-6 text-center text-white/60">
-                      No hay productos en el carrito.
-                    </td>
-                  </tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="text-sm text-white/70">
-            <span className="text-white/50">Total:</span>{" "}
-            <span className="text-white font-extrabold">${total.toFixed(2)}</span>
-          </div>
-
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-sm text-white/60">
-              Página {page} / {totalPages}
-            </span>
-            <div className="flex gap-2">
-              <button
-                className="rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5 disabled:opacity-40"
-                disabled={perfilIncompleto || page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                type="button"
-              >
-                ←
-              </button>
-              <button
-                className="rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5 disabled:opacity-40"
-                disabled={perfilIncompleto || page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                type="button"
-              >
-                →
-              </button>
-            </div>
+            <button
+              className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] text-sm font-medium text-white/80 hover:bg-white/[0.06] transition"
+              type="button"
+              onClick={() => navigate("/")}
+            >
+              Seguir comprando
+            </button>
           </div>
         </div>
       </div>

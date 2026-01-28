@@ -1,6 +1,8 @@
 import { api } from "./api";
 
 export type Celular = {
+  imagen: string;
+  precio(precio: any): import("react").ReactNode;
   id_celular: string;
   codigo: string;
   marca: string;
@@ -13,6 +15,7 @@ export type Celular = {
   stock_actual: number;
   estado: string;
   descripcion: string;
+  imagen_url?: string;
 };
 
 // ✅ alias para tu componente (CelularDto)
@@ -76,5 +79,14 @@ export async function updateCelular(id: string, payload: Partial<Celular>) {
 
 export async function deleteCelular(id: string) {
   const { data } = await api.delete<SuccessResponse<Celular>>(`/celulares/${id}`);
+  return data.data;
+}
+
+export async function uploadCelularImage(id: string, file: File) {
+  const formData = new FormData();
+  formData.append("imagen", file);
+  const { data } = await api.post<SuccessResponse<Celular>>(`/celulares/${id}/imagen`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return data.data;
 }

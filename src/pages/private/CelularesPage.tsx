@@ -4,6 +4,7 @@ import {
   createCelular,
   deleteCelular,
   getCelulares,
+  uploadCelularImage,
   updateCelular,
 } from "../../services/celulares.service";
 
@@ -38,6 +39,17 @@ export default function CelularesPage() {
   const [search, setSearch] = useState("");
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+  const resolveImageUrl = (value?: string) => {
+    if (!value) return "";
+    if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) {
+      return value;
+    }
+    return `${apiBaseUrl}${value}`;
+  };
 
   // ✅ NUEVO: estados para confirmación de eliminar
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -79,11 +91,18 @@ export default function CelularesPage() {
         stock_actual: Number(form.stock_actual),
       };
 
-      if (editingId) await updateCelular(editingId, payload);
-      else await createCelular(payload);
+      const saved = editingId
+        ? await updateCelular(editingId, payload)
+        : await createCelular(payload);
+      const savedId = editingId ?? saved.id_celular;
+
+      if (imageFile) {
+        await uploadCelularImage(savedId, imageFile);
+      }
 
       setForm(emptyForm);
       setEditingId(null);
+      setImageFile(null);
       await load();
     } catch {
       setError("Error guardando celular. Revisa datos / token / backend.");
@@ -92,6 +111,7 @@ export default function CelularesPage() {
 
   const onEdit = (c: Celular) => {
     setEditingId(c.id_celular);
+    setImageFile(null);
     const { id_celular, ...rest } = c;
     setForm({
       ...rest,
@@ -189,6 +209,7 @@ export default function CelularesPage() {
               onClick={() => {
                 setEditingId(null);
                 setForm(emptyForm);
+                setImageFile(null);
               }}
             >
               Cancelar edición
@@ -277,6 +298,15 @@ export default function CelularesPage() {
               required
             />
           </div>
+          <div className="md:col-span-2">
+            <label className="text-sm font-semibold text-white/70">Imagen</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="mt-2 block w-full text-sm text-white/70 file:mr-4 file:rounded-xl file:border-0 file:bg-white/10 file:px-4 file:py-2 file:text-white file:hover:bg-white/20"
+              onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+            />
+          </div>
 
           <div className="md:col-span-2">
             <button className="h-11 w-full rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition">
@@ -303,6 +333,7 @@ export default function CelularesPage() {
                   <th className="py-3 text-left">Stock</th>
                   <th className="py-3 text-left">Precio</th>
                   <th className="py-3 text-left">Estado</th>
+                  <th className="py-3 text-left">Imagen</th>
                   <th className="py-3 text-right">Acciones</th>
                 </tr>
               </thead>
@@ -318,6 +349,18 @@ export default function CelularesPage() {
                       <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
                         {c.estado}
                       </span>
+                    </td>
+                    <td className="py-3">
+                      {c.imagen_url ? (
+                        <img
+                          src={resolveImageUrl(c.imagen_url)}
+                          alt={`${c.marca} ${c.modelo}`}
+                          className="h-10 w-10 rounded-md object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className="text-white/40">Sin imagen</span>
+                      )}
                     </td>
                     <td className="py-3 text-right">
                       <div className="flex justify-end gap-2">
@@ -339,7 +382,7 @@ export default function CelularesPage() {
                 ))}
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-6 text-center text-white/60">
+                    <td colSpan={8} className="py-6 text-center text-white/60">
                       No hay celulares.
                     </td>
                   </tr>
