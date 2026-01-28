@@ -1,6 +1,7 @@
 ﻿import { useEffect, useMemo, useState, type JSX } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getCelulares, type Celular } from "../../services/celulares.service";
+import aboutStorePhone from "../../assets/celular_mano.png";
 
 function useDebouncedValue<T>(value: T, delayMs: number): T {
   const [debounced, setDebounced] = useState(value);
@@ -62,6 +63,15 @@ export default function PublicHome(): JSX.Element {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const resolveImageUrl = (value?: string) => {
+    if (!value) return "";
+    if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) {
+      return value;
+    }
+    return `${apiBaseUrl}${value}`;
+  };
 
   // clave de consulta (para re-fetch)
   const queryKey = useMemo(
@@ -159,13 +169,13 @@ export default function PublicHome(): JSX.Element {
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
                   href="#catalogo"
-                  className="h-11 rounded-full bg-[#16d3c6] px-6 text-sm font-semibold text-[#062428] hover:bg-[#22e2d6] transition"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-[#16d3c6] px-6 text-sm font-semibold text-[#062428] transition hover:bg-[#22e2d6]"
                 >
                   Comprar ahora
                 </a>
                 <a
                   href="#recomendados"
-                  className="h-11 rounded-full border border-white/20 px-6 text-sm font-semibold text-white hover:bg-white/10 transition"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-white/20 px-6 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
                   Ver recomendados
                 </a>
@@ -188,12 +198,22 @@ export default function PublicHome(): JSX.Element {
             <div className="relative">
               <div className="relative mx-auto h-[360px] w-[250px] rounded-[2.5rem] border border-white/15 bg-gradient-to-b from-[#1b4b57] to-[#0b2227] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
                 <div className="absolute inset-4 rounded-[2.1rem] bg-gradient-to-br from-[#3d74ff] via-[#0f3d4c] to-[#0b1820] opacity-90" />
-                <div className="relative h-full rounded-[2.1rem] border border-white/10 bg-gradient-to-br from-[#0dd3c6]/20 to-transparent p-4">
-                  <div className="text-xs uppercase tracking-[0.3em] text-white/60">TechNest</div>
-                  <div className="mt-4 text-lg font-semibold text-white">
-                    {featured ? `${featured.marca} ${featured.modelo}` : "Smartphone Pro"}
+                <div className="relative h-full overflow-hidden rounded-[2.1rem] border border-white/10 bg-gradient-to-br from-[#0dd3c6]/20 to-transparent p-4">
+                  {featured?.imagen_url ? (
+                    <img
+                      src={resolveImageUrl(featured.imagen_url)}
+                      alt={`${featured.marca} ${featured.modelo}`}
+                      className="absolute inset-0 h-full w-full object-cover opacity-90"
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <div className="relative">
+                    <div className="text-xs uppercase tracking-[0.3em] text-white/60">TechNest</div>
+                    <div className="mt-4 text-lg font-semibold text-white">
+                      {featured ? `${featured.marca} ${featured.modelo}` : "Smartphone Pro"}
+                    </div>
+                    <div className="mt-1 text-xs text-white/60">Edición 2026</div>
                   </div>
-                  <div className="mt-1 text-xs text-white/60">Edición 2026</div>
                 </div>
               </div>
               <div className="absolute -right-4 top-16 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white">
@@ -213,7 +233,7 @@ export default function PublicHome(): JSX.Element {
       <section id="recomendados" className="mx-auto max-w-6xl px-4">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40">Recommended</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-white/40">Recomendado</div>
             <h2 className="font-display mt-2 text-2xl font-semibold text-white">
               Selección destacada
             </h2>
@@ -232,7 +252,16 @@ export default function PublicHome(): JSX.Element {
                 <span className="rounded-full bg-white/10 px-2 py-1">New</span>
                 <span>2026</span>
               </div>
-              <div className="mt-4 h-32 rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]" />
+              <div className="mt-4 h-32 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
+                {c?.imagen_url ? (
+                  <img
+                    src={resolveImageUrl(c.imagen_url)}
+                    alt={`${c.marca} ${c.modelo}`}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : null}
+              </div>
               <div className="mt-4 text-sm text-white/70">
                 {c ? `${c.marca} ${c.modelo}` : "Cargando..."}
               </div>
@@ -244,7 +273,7 @@ export default function PublicHome(): JSX.Element {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4">
+      {/* <section className="mx-auto max-w-6xl px-4">
         <div className="rounded-3xl bg-slate-50 px-6 py-10 text-slate-900 shadow-[0_25px_60px_rgba(15,23,42,0.15)]">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -281,60 +310,30 @@ export default function PublicHome(): JSX.Element {
             ))}
           </div>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-8 rounded-3xl bg-[#101d22] px-6 py-10 md:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-white/50">About our store</div>
-            <h3 className="font-display mt-2 text-2xl font-semibold text-white">
-              Conoce nuestra experiencia
-            </h3>
-            <p className="mt-4 text-sm text-white/60">
-              Seleccionamos los mejores smartphones con garantía, envíos rápidos y
-              asesoría personalizada para que compres seguro.
-            </p>
-            <div className="mt-6 grid gap-4 text-sm text-white/70 md:grid-cols-3">
-              {[
-                "Envío gratis a partir de $500",
-                "Descuentos semanales",
-                "Atención 24/7",
-              ].map((text) => (
-                <div key={text} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  {text}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="relative">
-            <div className="absolute -top-6 right-0 h-20 w-20 rounded-2xl bg-[#16d3c6]/30 blur-2xl" />
-            <div className="h-full rounded-3xl border border-white/10 bg-gradient-to-br from-[#1a3b45] to-[#0d1c21]" />
-          </div>
-        </div>
-      </section>
+      </section> */}
 
       <section id="catalogo" className="mx-auto max-w-6xl px-4">
-        <div className="rounded-3xl bg-slate-50 px-6 py-8 text-slate-900 shadow-[0_25px_60px_rgba(15,23,42,0.15)]">
+        <div className="rounded-3xl border border-white/10 bg-[#101d22] px-6 py-8 text-white shadow-[0_25px_60px_rgba(0,0,0,0.35)]">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <div className="text-xs uppercase tracking-[0.3em] text-slate-400">
-                Shop the latest smartphones
+              <div className="text-xs uppercase tracking-[0.3em] text-white/50">
+                Compra los mejores smartphones
               </div>
-              <h3 className="font-display mt-2 text-2xl font-semibold text-slate-900">
+              <h3 className="font-display mt-2 text-2xl font-semibold text-white">
                 Catálogo actualizado
               </h3>
             </div>
-            <div className="text-sm text-slate-500">
+            <div className="text-sm text-white/60">
               Página {page} de {totalPages}
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-4">
+          <div className="mt-6 grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 md:grid-cols-4">
             <div className="md:col-span-2">
-              <label className="text-sm font-semibold text-slate-600">Buscar</label>
+              <label className="text-sm font-semibold text-white/70">Buscar</label>
               <input
-                className="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-4 outline-none
-                       placeholder:text-slate-400 focus:ring-2 focus:ring-[#16d3c6]/40"
+                className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none
+                       placeholder:text-white/40 focus:ring-2 focus:ring-[#16d3c6]/40"
                 placeholder="Ej: iPhone, Samsung, 256GB..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -342,9 +341,9 @@ export default function PublicHome(): JSX.Element {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-slate-600">Buscar por</label>
+              <label className="text-sm font-semibold text-white/70">Buscar por</label>
               <select
-                className="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-4 outline-none
+                className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none
                        focus:ring-2 focus:ring-[#16d3c6]/40"
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
@@ -364,10 +363,10 @@ export default function PublicHome(): JSX.Element {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-slate-600">Ordenar</label>
+              <label className="text-sm font-semibold text-white/70">Ordenar</label>
               <div className="mt-2 grid grid-cols-[1fr_auto] gap-2">
                 <select
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-4 outline-none
+                  className="h-11 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none
                          focus:ring-2 focus:ring-[#16d3c6]/40"
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
@@ -381,7 +380,7 @@ export default function PublicHome(): JSX.Element {
 
                 <button
                   type="button"
-                  className="h-11 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition"
+                  className="h-11 rounded-xl border border-white/10 px-3 text-sm font-semibold text-white/70 transition hover:bg-white/10"
                   onClick={() => setOrder((o) => (o === "ASC" ? "DESC" : "ASC"))}
                   title="Cambiar ASC/DESC"
                 >
@@ -391,9 +390,9 @@ export default function PublicHome(): JSX.Element {
             </div>
 
             <div className="md:col-span-4 flex flex-wrap items-center gap-2">
-              <label className="text-sm font-semibold text-slate-600">Limit</label>
+              <label className="text-sm font-semibold text-white/70">Límite</label>
               <select
-                className="h-10 rounded-xl border border-slate-200 bg-white px-3 outline-none"
+                className="h-10 rounded-xl border border-white/10 bg-white/5 px-3 text-white outline-none"
                 value={limit}
                 onChange={(e) => setLimit(Number(e.target.value))}
               >
@@ -404,7 +403,7 @@ export default function PublicHome(): JSX.Element {
               </select>
 
               <button
-                className="h-10 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition"
+                className="h-10 rounded-xl border border-white/10 px-3 text-sm font-semibold text-white/70 transition hover:bg-white/10"
                 onClick={() => {
                   setSearch("");
                   setSearchField("");
@@ -420,19 +419,19 @@ export default function PublicHome(): JSX.Element {
           </div>
 
           {loading && (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 text-slate-500">
+            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-white/60">
               Cargando...
             </div>
           )}
 
           {error && (
-            <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600">
+            <div className="mt-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4 text-red-200">
               ❌ {error}
             </div>
           )}
 
           {!loading && !error && items.length === 0 && (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 text-slate-500">
+            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-white/60">
               No hay resultados.
             </div>
           )}
@@ -444,37 +443,46 @@ export default function PublicHome(): JSX.Element {
                   <Link
                     key={c.id_celular}
                     to={`/celulares/${c.id_celular}`}
-                    className="group rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(15,23,42,0.15)]"
+                    className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:bg-white/10 hover:shadow-[0_15px_35px_rgba(0,0,0,0.35)]"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="font-semibold text-slate-900">
+                        <div className="font-semibold text-white">
                           {c.marca} {c.modelo}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">
+                        <div className="mt-1 text-xs text-white/50">
                           Código: {c.codigo} • {c.color} • {c.almacenamiento} • {c.ram}
                         </div>
                       </div>
                       <Badge text={c.estado} />
                     </div>
 
-                    <div className="mt-4 h-28 rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-200" />
+                    <div className="mt-4 h-28 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
+                      {c.imagen_url ? (
+                        <img
+                          src={resolveImageUrl(c.imagen_url)}
+                          alt={`${c.marca} ${c.modelo}`}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : null}
+                    </div>
 
                     <div className="mt-4 flex items-end justify-between">
                       <div>
-                        <div className="text-xs text-slate-500">Precio</div>
-                        <div className="text-lg font-bold text-slate-900">
+                        <div className="text-xs text-white/50">Precio</div>
+                        <div className="text-lg font-bold text-white">
                           ${money(c.precio_venta)}
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <div className="text-xs text-slate-500">Stock</div>
-                        <div className="font-semibold text-slate-800">{c.stock_actual}</div>
+                        <div className="text-xs text-white/50">Stock</div>
+                        <div className="font-semibold text-white/80">{c.stock_actual}</div>
                       </div>
                     </div>
 
-                    <p className="mt-4 line-clamp-2 text-sm text-slate-500">
+                    <p className="mt-4 line-clamp-2 text-sm text-white/60">
                       {c.descripcion}
                     </p>
                   </Link>
@@ -483,20 +491,20 @@ export default function PublicHome(): JSX.Element {
 
               <div className="mt-6 flex items-center justify-center gap-2">
                 <button
-                  className="h-10 rounded-full border border-slate-200 px-4 text-sm font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40"
+                  className="h-10 rounded-full border border-white/10 px-4 text-sm font-semibold text-white/70 transition hover:bg-white/10 disabled:opacity-40"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1}
                 >
                   ←
                 </button>
 
-                <div className="text-sm text-slate-600">
-                  Página <span className="font-semibold text-slate-900">{page}</span> de{" "}
-                  <span className="font-semibold text-slate-900">{totalPages}</span>
+                <div className="text-sm text-white/60">
+                  Página <span className="font-semibold text-white">{page}</span> de{" "}
+                  <span className="font-semibold text-white">{totalPages}</span>
                 </div>
 
                 <button
-                  className="h-10 rounded-full border border-slate-200 px-4 text-sm font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40"
+                  className="h-10 rounded-full border border-white/10 px-4 text-sm font-semibold text-white/70 transition hover:bg-white/10 disabled:opacity-40"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages}
                 >
@@ -509,64 +517,111 @@ export default function PublicHome(): JSX.Element {
       </section>
 
       <section className="mx-auto max-w-6xl px-4">
-        <div className="rounded-3xl bg-[#0d2227] px-6 py-10">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#1b1b1d] px-6 py-10">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-60"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'><g fill='none' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1'><path d='M30 2 L90 2 L118 52 L90 102 L30 102 L2 52 Z'/></g></svg>\")",
+              backgroundSize: "160px 140px",
+            }}
+          />
+          <div className="relative grid items-center gap-8 md:grid-cols-[1.15fr_0.85fr]">
             <div>
-              <div className="text-xs uppercase tracking-[0.3em] text-white/50">Limited-time deals</div>
-              <h3 className="font-display mt-2 text-2xl font-semibold text-white">
-                Ofertas relámpago
+              <div className="text-xs uppercase tracking-[0.3em] text-white/50">
+                Acerca de nuestra tienda
+              </div>
+              <h3 className="font-display mt-2 text-3xl font-semibold text-white">
+                Conoce nuestra experiencia
               </h3>
-            </div>
-            <div className="flex gap-4 text-center text-xs text-white/60">
-              {[
-                { label: "Days", value: "03" },
-                { label: "Hours", value: "06" },
-                { label: "Minutes", value: "16" },
-                { label: "Seconds", value: "33" },
-              ].map((t) => (
-                <div key={t.label} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <div className="text-lg font-semibold text-white">{t.value}</div>
-                  {t.label}
+              <p className="mt-4 text-sm text-white/70">
+                En TechNest Mobile reunimos los últimos smartphones y accesorios de
+                marcas globales. Nuestra misión es hacer la tecnología accesible, segura y
+                emocionante para todos.
+              </p>
+              <p className="mt-4 text-sm text-white/60">
+                Desde modelos premium hasta opciones accesibles, cuidamos la calidad,
+                la transparencia y el soporte para que encuentres tu próximo móvil ideal.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-6 text-sm text-white/70">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
+                      <path
+                        d="M3 7h11l3 5h4v6h-2a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H3V7z"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path d="M3 7V5a2 2 0 0 1 2-2h7" strokeWidth="1.5" />
+                    </svg>
+                  </span>
+                  <div>
+                    <div className="font-semibold text-white">Envío Gratis</div>
+                    <div className="text-xs text-white/50">Por compras desde $500</div>
+                  </div>
                 </div>
-              ))}
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
+                      <path
+                        d="M12 3l3.5 7H22l-5.5 4 2 7L12 17l-6.5 4 2-7L2 10h6.5z"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <div>
+                    <div className="font-semibold text-white">Descuentos</div>
+                    <div className="text-xs text-white/50">Ahorra en cada compra</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
+                      <path
+                        d="M12 4a8 8 0 1 0 8 8"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path d="M12 8v4l3 2" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                  <div>
+                    <div className="font-semibold text-white">24/7 Ayuda</div>
+                    <div className="text-xs text-white/50">Soporte siempre activo</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -right-10 top-10 h-48 w-48 rounded-full bg-[#16d3c6]/10 blur-3xl" />
+              <div className="relative mx-auto w-full max-w-[360px] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#23262a] to-[#141516] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+                <img
+                  src={aboutStorePhone}
+                  alt="Smartphone"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            {
-              name: "Sarah Johnson",
-              text: "Totalmente satisfecha con mi compra. La experiencia fue rápida y segura.",
-            },
-            {
-              name: "Michael Lee",
-              text: "Me encantó la variedad y el soporte. Muy recomendado.",
-            },
-            {
-              name: "Daniel Perez",
-              text: "Gran atención al cliente y entregas puntuales.",
-            },
-          ].map((t) => (
-            <div key={t.name} className="rounded-2xl border border-white/10 bg-white/5 p-6 text-white/70">
-              <div className="text-sm italic">"{t.text}"</div>
-              <div className="mt-4 text-sm font-semibold text-white">{t.name}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4">
-        <div className="rounded-3xl bg-slate-50 px-6 py-10 text-slate-900 shadow-[0_25px_60px_rgba(15,23,42,0.15)]">
+        <div className="rounded-3xl border border-white/10 bg-[#101d22] px-6 py-10 text-white shadow-[0_25px_60px_rgba(0,0,0,0.35)]">
           <div className="grid gap-6 md:grid-cols-[1.2fr_1fr]">
             <div>
-              <div className="text-xs uppercase tracking-[0.3em] text-slate-400">Get in touch</div>
-              <h3 className="font-display mt-2 text-2xl font-semibold text-slate-900">
+              <div className="text-xs uppercase tracking-[0.3em] text-white/50">Contáctanos</div>
+              <h3 className="font-display mt-2 text-2xl font-semibold text-white">
                 ¿Tienes preguntas? Hablemos.
               </h3>
-              <p className="mt-3 text-sm text-slate-500">
+              <p className="mt-3 text-sm text-white/60">
                 Escríbenos y un asesor te ayudará a elegir el smartphone ideal.
               </p>
             </div>
@@ -578,16 +633,16 @@ export default function PublicHome(): JSX.Element {
             >
               <div className="grid gap-3 md:grid-cols-2">
                 <input
-                  className="h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none"
+                  className="h-11 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/40"
                   placeholder="Nombre"
                 />
                 <input
-                  className="h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none"
+                  className="h-11 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/40"
                   placeholder="Correo"
                 />
               </div>
               <textarea
-                className="h-28 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+                className="h-28 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40"
                 placeholder="Tu mensaje"
               />
               <button className="h-11 rounded-full bg-[#16d3c6] px-6 text-sm font-semibold text-[#062428] hover:bg-[#22e2d6] transition">
