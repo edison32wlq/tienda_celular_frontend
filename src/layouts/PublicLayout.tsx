@@ -5,19 +5,13 @@ import PublicFooter from "../components/public/PublicFooter";
 
 export default function PublicLayout(): JSX.Element {
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-[#050f14] text-slate-100">
       <PublicHeader />
 
       {/* espacio por header fijo */}
-      <div className="h-16" />
-
-      <main className="mx-auto max-w-6xl px-4 py-6">
+      <main className="mx-auto w-full px-0 pt-16">
         <Outlet />
       </main>
-
-      {/* espacio por footer fijo */}
-      <div className="h-14" />
-
       <PublicFooter />
     </div>
   );

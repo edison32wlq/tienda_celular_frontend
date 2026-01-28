@@ -159,7 +159,6 @@ export default function AdminRolesPage(): JSX.Element {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <div className="text-2xl font-extrabold">Admin · Roles</div>
-        <div className="text-white/50 text-sm">CRUD + paginación + búsqueda</div>
 
         <div className="ml-auto">
           <button

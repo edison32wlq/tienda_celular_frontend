@@ -10,6 +10,7 @@ import PerfilClientePage from "../pages/private/PerfilClientePage";
 import ProveedoresPage from "../pages/private/ProveedoresPage";
 import CarritoPage from "../pages/private/CarritoPage";
 import ComprasPage from "../pages/private/ComprasPage";
+import KardexPage from "../pages/private/KardexPage";
 
 
 export const privateRoutes: RouteObject = {
@@ -27,6 +28,7 @@ export const privateRoutes: RouteObject = {
 
     // /dashboard/orden-compras
     { path: "orden-compras", element: <OrdenComprasPage /> },
+    { path: "admin/kardex", element: <KardexPage /> },
 
     // /dashboard/mi-perfil
     { path: "mi-perfil", element: <PerfilClientePage /> },
