@@ -316,47 +316,49 @@ export default function ComprasPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-6xl space-y-6">
       {/* Header */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h1 className="text-2xl font-extrabold">Compras</h1>
-        <p className="mt-1 text-sm text-white/60">
-          Genera tu factura desde el carrito y revisa tu historial de compras.
-        </p>
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+        <div className="px-8 pt-7 pb-5 border-b border-white/10">
+          <h1 className="text-3xl font-semibold tracking-tight">Compras</h1>
+          <p className="mt-2 text-sm text-white/60 leading-relaxed">
+            Genera tu factura desde el carrito y revisa tu historial de compras.
+          </p>
 
-        {error && (
-          <div className="mt-4 rounded-xl border border-red-400/20 bg-red-400/10 p-3 text-red-200">
-            ❌ {error}
-          </div>
-        )}
-
-        {perfilIncompleto && (
-          <div className="mt-4 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-yellow-100">
-            <div className="font-bold">⚠️ Completa tu Perfil Cliente</div>
-            <div className="mt-1 text-sm text-yellow-100/80">
-              Para comprar necesitas tener tu perfil completo (cédula, teléfono, dirección).
+          {error && (
+            <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-400/10 px-5 py-4 text-red-200">
+              ❌ {error}
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <div className="text-sm text-white/70 space-y-1">
-            <div>
-              <span className="text-white/50">id_usuario:</span>{" "}
-              <span className="font-semibold">{String(idUsuario || "—")}</span>
+          {perfilIncompleto && (
+            <div className="mt-4 rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-5 py-4 text-yellow-100">
+              <div className="font-semibold">⚠️ Completa tu Perfil Cliente</div>
+              <div className="mt-1 text-sm text-yellow-100/80">
+                Para comprar necesitas tener tu perfil completo (cédula, teléfono, dirección).
+              </div>
             </div>
+          )}
+        </div>
+
+        <div className="px-8 py-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="text-sm text-white/65 space-y-1">
             <div>
-              <span className="text-white/50">id_cliente:</span>{" "}
-              <span className="font-semibold">{perfil?.id_cliente || "—"}</span>
+              <span className="text-white/45">id_usuario:</span>{" "}
+              <span className="font-semibold text-white/80">{String(idUsuario || "—")}</span>
             </div>
             <div>
-              <span className="text-white/50">Carrito abierto:</span>{" "}
-              <span className="font-semibold">{carrito?.id_carrito || "—"}</span>
+              <span className="text-white/45">id_cliente:</span>{" "}
+              <span className="font-semibold text-white/80">{perfil?.id_cliente || "—"}</span>
+            </div>
+            <div>
+              <span className="text-white/45">Carrito abierto:</span>{" "}
+              <span className="font-semibold text-white/80">{carrito?.id_carrito || "—"}</span>
             </div>
           </div>
 
           <button
-            className="h-11 rounded-xl border border-white/10 px-4 hover:bg-white/5"
+            className="h-11 rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm font-medium text-white/80 hover:bg-white/[0.06] transition"
             type="button"
             onClick={() => loadAll()}
           >
@@ -365,117 +367,171 @@ export default function ComprasPage() {
         </div>
       </div>
 
-      {/* Generar factura */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-xl font-bold">Generar factura</h2>
-          <span className="text-sm text-white/60">
-            Productos en carrito: <b>{itemsCarrito.length}</b>
-          </span>
+      {/* ✅ Checkout layout: factura (izq) + resumen (der) */}
+      <div className="grid gap-6 lg:grid-cols-12">
+        {/* Izquierda */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Generar factura */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+            <div className="px-8 pt-7 pb-5 border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Generar factura</h2>
+              <span className="text-sm text-white/60">
+                Productos en carrito: <b className="text-white/85">{itemsCarrito.length}</b>
+              </span>
+            </div>
+
+            <div className="px-8 py-7">
+              {loading ? (
+                <p className="text-white/60">Cargando...</p>
+              ) : (
+                <>
+                  {/* Preview productos */}
+                  <div className="overflow-auto rounded-xl border border-white/10">
+                    <table className="min-w-[860px] w-full text-sm">
+                      <thead className="text-white/60 bg-white/[0.02]">
+                        <tr className="border-b border-white/10">
+                          <th className="py-3 px-4 text-left font-medium">Producto</th>
+                          <th className="py-3 px-4 text-left font-medium">Precio</th>
+                          <th className="py-3 px-4 text-left font-medium">Cantidad</th>
+                          <th className="py-3 px-4 text-left font-medium">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {itemsCarrito.map((it) => {
+                          const nombre = nombreCelular((it as any).id_celular, (it as any).celular);
+                          const unit = Number(it.precio_unitario);
+                          const qty = Number(it.cantidad);
+                          const sub = unit * qty;
+
+                          return (
+                            <tr key={it.id_producto_carrito} className="border-b border-white/5">
+                              <td className="py-4 px-4">
+                                <div className="font-semibold text-white/90">{nombre}</div>
+                              </td>
+                              <td className="py-4 px-4 tabular-nums text-white/85">
+                                ${unit.toFixed(2)}
+                              </td>
+                              <td className="py-4 px-4 text-white/85">{qty}</td>
+                              <td className="py-4 px-4 tabular-nums text-white/85">
+                                ${sub.toFixed(2)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+
+                        {itemsCarrito.length === 0 ? (
+                          <tr>
+                            <td colSpan={4} className="py-10 text-center text-white/60">
+                              Tu carrito está vacío.
+                            </td>
+                          </tr>
+                        ) : null}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Form */}
+                  <div className="mt-6 grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label className="text-xs font-semibold tracking-wide text-white/60">
+                        Método de pago
+                      </label>
+                      <select
+                        className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
+                                   focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
+                        value={metodoPago}
+                        onChange={(e) => setMetodoPago(e.target.value)}
+                        disabled={perfilIncompleto || itemsCarrito.length === 0 || working}
+                      >
+                        <option value="EFECTIVO">EFECTIVO</option>
+                        <option value="TARJETA">TARJETA</option>
+                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                      </select>
+                      <p className="mt-2 text-xs text-white/45">
+                        * Se generará la factura y se descontará stock.
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold tracking-wide text-white/60">
+                        IVA
+                      </label>
+                      <div className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 flex items-center">
+                        <span className="text-sm font-semibold text-white/85">15%</span>
+                      </div>
+                      <p className="mt-2 text-xs text-white/45">
+                        IVA fijo configurado en el frontend.
+                      </p>
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <button
+                        className="h-11 w-full rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition disabled:opacity-40"
+                        disabled={perfilIncompleto || itemsCarrito.length === 0 || working}
+                        type="button"
+                        onClick={() => setConfirmOpen(true)}
+                      >
+                        {working ? "Procesando..." : "Confirmar y generar factura"}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
 
-        {loading ? (
-          <p className="mt-4 text-white/60">Cargando...</p>
-        ) : (
-          <>
-            {/* Tabla preview */}
-            <div className="mt-4 overflow-auto">
-              <table className="min-w-[950px] w-full text-sm">
-                <thead className="text-white/60">
-                  <tr className="border-b border-white/10">
-                    <th className="py-3 text-left">Producto</th>
-                    <th className="py-3 text-left">Precio</th>
-                    <th className="py-3 text-left">Cantidad</th>
-                    <th className="py-3 text-left">Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {itemsCarrito.map((it) => {
-                    const nombre = nombreCelular((it as any).id_celular, (it as any).celular);
-                    const unit = Number(it.precio_unitario);
-                    const qty = Number(it.cantidad);
-                    const sub = unit * qty;
+        {/* Derecha: Resumen sticky */}
+        <div className="lg:col-span-4">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft p-6 lg:sticky lg:top-24">
+            <div className="text-lg font-semibold tracking-tight">Resumen</div>
 
-                    return (
-                      <tr key={it.id_producto_carrito} className="border-b border-white/5">
-                        <td className="py-3">{nombre}</td>
-                        <td className="py-3">${unit.toFixed(2)}</td>
-                        <td className="py-3">{qty}</td>
-                        <td className="py-3">${sub.toFixed(2)}</td>
-                      </tr>
-                    );
-                  })}
-
-                  {itemsCarrito.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="py-6 text-center text-white/60">
-                        Tu carrito está vacío.
-                      </td>
-                    </tr>
-                  ) : null}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Form de factura */}
-            <div className="mt-6 grid gap-3 md:grid-cols-3">
-              <div>
-                <label className="text-sm font-semibold text-white/70">Método de pago</label>
-                <select
-                  className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-3 outline-none"
-                  value={metodoPago}
-                  onChange={(e) => setMetodoPago(e.target.value)}
-                  disabled={perfilIncompleto || itemsCarrito.length === 0 || working}
-                >
-                  <option value="EFECTIVO">EFECTIVO</option>
-                  <option value="TARJETA">TARJETA</option>
-                  <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                </select>
+            <div className="mt-5 space-y-3 text-sm">
+              <div className="flex items-center justify-between text-white/70">
+                <span>Subtotal</span>
+                <span className="tabular-nums text-white/85">${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-white/70">
+                <span>IVA (15%)</span>
+                <span className="tabular-nums text-white/85">${iva.toFixed(2)}</span>
               </div>
 
-              {/* ✅ IVA fijo, sin select */}
-              <div>
-                <label className="text-sm font-semibold text-white/70">IVA</label>
-                <div className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/5 px-3 flex items-center">
-                  <span className="font-semibold">15%</span>
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                <div className="text-sm text-white/60">Resumen</div>
-                <div className="mt-2 text-sm">
-                  Subtotal: <b>${subtotal.toFixed(2)}</b>
-                </div>
-                <div className="text-sm">
-                  IVA (15%): <b>${iva.toFixed(2)}</b>
-                </div>
-                <div className="text-sm">
-                  Total: <b>${total.toFixed(2)}</b>
-                </div>
-              </div>
-
-              <div className="md:col-span-3">
-                <button
-                  className="h-11 w-full rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition disabled:opacity-40"
-                  disabled={perfilIncompleto || itemsCarrito.length === 0 || working}
-                  type="button"
-                  onClick={() => setConfirmOpen(true)}
-                >
-                  {working ? "Procesando..." : "Confirmar y generar factura"}
-                </button>
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                <span className="text-white/80 font-semibold">Total</span>
+                <span className="tabular-nums text-white font-semibold text-xl">
+                  ${total.toFixed(2)}
+                </span>
               </div>
             </div>
-          </>
-        )}
+
+            <button
+              className="mt-6 h-11 w-full rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition disabled:opacity-40"
+              disabled={perfilIncompleto || itemsCarrito.length === 0 || working}
+              type="button"
+              onClick={() => setConfirmOpen(true)}
+            >
+              Confirmar compra
+            </button>
+
+            <button
+              className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] text-sm font-medium text-white/80 hover:bg-white/[0.06] transition"
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              Ir arriba
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Historial */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-xl font-bold">Historial de compras</h2>
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-soft">
+        <div className="px-8 pt-7 pb-5 border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold tracking-tight">Historial de compras</h2>
 
           <select
-            className="h-11 rounded-xl border border-white/10 bg-transparent px-3 outline-none"
+            className="h-10 rounded-xl border border-white/10 bg-white/[0.02] px-3 text-sm text-white/85 outline-none
+                       focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
             value={histLimit}
             onChange={(e) => {
               setHistPage(1);
@@ -491,95 +547,115 @@ export default function ComprasPage() {
           </select>
         </div>
 
-        {perfilIncompleto ? (
-          <p className="mt-4 text-white/60">Completa tu perfil para ver tu historial.</p>
-        ) : (
-          <>
-            <div className="mt-4 overflow-auto">
-              <table className="min-w-[1050px] w-full text-sm">
-                <thead className="text-white/60">
-                  <tr className="border-b border-white/10">
-                    <th className="py-3 text-left">N°</th>
-                    <th className="py-3 text-left">Fecha</th>
-                    <th className="py-3 text-left">Método</th>
-                    <th className="py-3 text-left">Total</th>
-                    <th className="py-3 text-left">Productos</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {facturas.map((f) => {
-                    const dets = detallesDeFactura(f.id_factura);
+        <div className="px-8 py-7">
+          {perfilIncompleto ? (
+            <p className="text-white/60">Completa tu perfil para ver tu historial.</p>
+          ) : (
+            <>
+              {/* ✅ Cards (más tienda), no tabla gigante */}
+              <div className="grid gap-4">
+                {facturas.map((f) => {
+                  const dets = detallesDeFactura(f.id_factura);
 
-                    return (
-                      <tr key={f.id_factura} className="border-b border-white/5 align-top">
-                        <td className="py-3">{f.numero_factura}</td>
-                        <td className="py-3">{String(f.fecha_emision).slice(0, 10)}</td>
-                        <td className="py-3">{f.metodo_pago}</td>
-                        <td className="py-3">${Number(f.total).toFixed(2)}</td>
-                        <td className="py-3">
-                          {dets.length === 0 ? (
-                            <span className="text-white/50">Sin detalles</span>
-                          ) : (
-                            <ul className="space-y-1">
-                              {dets.map((d) => {
-                                const name = nombreCelular((d as any).id_celular, (d as any).celular);
-                                return (
-                                  <li key={(d as any).id_detalle_factura} className="text-white/80">
-                                    {name} — x{Number((d as any).cantidad)} — $
-                                    {Number((d as any).subtotal).toFixed(2)}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  return (
+                    <div
+                      key={f.id_factura}
+                      className="rounded-2xl border border-white/10 bg-white/[0.02] p-5"
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <div className="text-sm text-white/60">Factura</div>
+                          <div className="text-lg font-semibold text-white/90">
+                            {f.numero_factura}
+                          </div>
+                          <div className="mt-1 text-sm text-white/60">
+                            {String(f.fecha_emision).slice(0, 10)} • {f.metodo_pago}
+                          </div>
+                        </div>
 
-                  {facturas.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="py-6 text-center text-white/60">
-                        No hay compras registradas.
-                      </td>
-                    </tr>
-                  ) : null}
-                </tbody>
-              </table>
-            </div>
+                        <div className="text-right">
+                          <div className="text-sm text-white/60">Total</div>
+                          <div className="text-xl font-semibold text-white">
+                            ${Number(f.total).toFixed(2)}
+                          </div>
+                        </div>
+                      </div>
 
-            <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-white/60">
-                Página {histPage} / {histTotalPages}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  className="rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5 disabled:opacity-40"
-                  disabled={histPage <= 1}
-                  onClick={() => setHistPage((p) => p - 1)}
-                  type="button"
-                >
-                  ←
-                </button>
-                <button
-                  className="rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5 disabled:opacity-40"
-                  disabled={histPage >= histTotalPages}
-                  onClick={() => setHistPage((p) => p + 1)}
-                  type="button"
-                >
-                  →
-                </button>
+                      <div className="mt-4 border-t border-white/10 pt-4">
+                        <div className="text-sm font-semibold text-white/70">Productos</div>
+
+                        {dets.length === 0 ? (
+                          <div className="mt-2 text-sm text-white/50">Sin detalles</div>
+                        ) : (
+                          <ul className="mt-2 space-y-1 text-sm text-white/80">
+                            {dets.map((d) => {
+                              const name = nombreCelular(
+                                (d as any).id_celular,
+                                (d as any).celular
+                              );
+                              return (
+                                <li key={(d as any).id_detalle_factura} className="flex justify-between gap-4">
+                                  <span className="truncate">
+                                    {name} <span className="text-white/50">x{Number((d as any).cantidad)}</span>
+                                  </span>
+                                  <span className="tabular-nums">
+                                    ${Number((d as any).subtotal).toFixed(2)}
+                                  </span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {facturas.length === 0 ? (
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 text-center text-white/60">
+                    No hay compras registradas.
+                  </div>
+                ) : null}
               </div>
-            </div>
-          </>
-        )}
+
+              {/* paginación */}
+              <div className="mt-5 flex items-center justify-between">
+                <span className="text-sm text-white/60">
+                  Página <span className="text-white/85 font-semibold">{histPage}</span> /{" "}
+                  <span className="text-white/85 font-semibold">{histTotalPages}</span>
+                </span>
+
+                <div className="flex gap-2">
+                  <button
+                    className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                    disabled={histPage <= 1}
+                    onClick={() => setHistPage((p) => p - 1)}
+                    type="button"
+                  >
+                    ←
+                  </button>
+                  <button
+                    className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06] disabled:opacity-40 transition"
+                    disabled={histPage >= histTotalPages}
+                    onClick={() => setHistPage((p) => p + 1)}
+                    type="button"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Confirm */}
       <ConfirmDialog
         open={confirmOpen}
         title="Confirmar compra"
-        description={`Se generará la factura por $${total.toFixed(2)} y se descontará stock. ¿Continuar?`}
+        description={`Se generará la factura por $${total.toFixed(
+          2
+        )} y se descontará stock. ¿Continuar?`}
         confirmText="Sí, generar"
         cancelText="Cancelar"
         onCancel={() => setConfirmOpen(false)}

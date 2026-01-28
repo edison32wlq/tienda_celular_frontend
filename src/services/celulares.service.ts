@@ -1,6 +1,8 @@
 import { api } from "./api";
 
 export type Celular = {
+  imagen: string;
+  precio(precio: any): import("react").ReactNode;
   id_celular: string;
   codigo: string;
   marca: string;
