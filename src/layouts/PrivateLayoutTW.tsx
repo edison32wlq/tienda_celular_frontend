@@ -130,6 +130,12 @@ export default function PrivateLayoutTW(): JSX.Element {
                   label="Roles"
                   onClick={() => setOpen(false)}
                 />
+
+                <Item
+                  to="/dashboard/admin/kardex"
+                  label="Kardex"
+                  onClick={() => setOpen(false)}
+                />
               </>
             ) : null}
 

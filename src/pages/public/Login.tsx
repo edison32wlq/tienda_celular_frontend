@@ -19,7 +19,8 @@ export default function Login(): JSX.Element {
     try {
       setError(null);
       await login({ correo, contrasena });
-      navigate(state.from || "/dashboard", { replace: true });
+      // Redirige al dashboard siempre, independientemente de la página anterior
+      navigate("/dashboard", { replace: true });
     } catch {
       setError("Credenciales inválidas o error de servidor.");
     }
@@ -40,8 +41,7 @@ export default function Login(): JSX.Element {
         <div>
           <label className="text-sm font-semibold text-white/70">Correo</label>
           <input
-            className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
-                       placeholder:text-white/40 focus:ring-2 focus:ring-blue-600/40"
+            className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none placeholder:text-white/40 focus:ring-2 focus:ring-blue-600/40"
             type="email"
             value={correo}
             onChange={(e) => setCorreo(e.target.value)}
@@ -52,8 +52,7 @@ export default function Login(): JSX.Element {
         <div>
           <label className="text-sm font-semibold text-white/70">Contraseña</label>
           <input
-            className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
-                       placeholder:text-white/40 focus:ring-2 focus:ring-blue-600/40"
+            className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none placeholder:text-white/40 focus:ring-2 focus:ring-blue-600/40"
             type="password"
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
