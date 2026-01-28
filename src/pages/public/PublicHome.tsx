@@ -2,6 +2,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { getCelulares, type Celular } from "../../services/celulares.service";
 import aboutStorePhone from "../../assets/celular_mano.png";
+import iphone17 from "../../assets/iphone17.png";
 
 function useDebouncedValue<T>(value: T, delayMs: number): T {
   const [debounced, setDebounced] = useState(value);
@@ -195,37 +196,12 @@ export default function PublicHome(): JSX.Element {
                 </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="relative mx-auto h-[360px] w-[250px] rounded-[2.5rem] border border-white/15 bg-gradient-to-b from-[#1b4b57] to-[#0b2227] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
-                <div className="absolute inset-4 rounded-[2.1rem] bg-gradient-to-br from-[#3d74ff] via-[#0f3d4c] to-[#0b1820] opacity-90" />
-                <div className="relative h-full overflow-hidden rounded-[2.1rem] border border-white/10 bg-gradient-to-br from-[#0dd3c6]/20 to-transparent p-4">
-                  {featured?.imagen_url ? (
-                    <img
-                      src={resolveImageUrl(featured.imagen_url)}
-                      alt={`${featured.marca} ${featured.modelo}`}
-                      className="absolute inset-0 h-full w-full object-cover opacity-90"
-                      loading="lazy"
-                    />
-                  ) : null}
-                  <div className="relative">
-                    <div className="text-xs uppercase tracking-[0.3em] text-white/60">TechNest</div>
-                    <div className="mt-4 text-lg font-semibold text-white">
-                      {featured ? `${featured.marca} ${featured.modelo}` : "Smartphone Pro"}
-                    </div>
-                    <div className="mt-1 text-xs text-white/60">Edición 2026</div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -right-4 top-16 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white">
-                <div className="text-xs text-white/60">Precio desde</div>
-                <div className="font-semibold">
-                  {featured ? `$${money(featured.precio_venta)}` : "$899"}
-                </div>
-              </div>
-              <div className="absolute -left-8 bottom-10 rounded-full border border-white/10 bg-[#16d3c6] px-4 py-2 text-xs font-semibold text-[#062428]">
-                Stock inmediato
-              </div>
-            </div>
+            <img
+              src={iphone17}
+              alt="iPhone 17"
+              className="mx-auto h-[660px] w-[550px] object-contain"
+              loading="lazy"
+            />
           </div>
         </div>
       </section>
@@ -252,7 +228,7 @@ export default function PublicHome(): JSX.Element {
                 <span className="rounded-full bg-white/10 px-2 py-1">New</span>
                 <span>2026</span>
               </div>
-              <div className="mt-4 h-32 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
+              <div className="mt-4 aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
                 {c?.imagen_url ? (
                   <img
                     src={resolveImageUrl(c.imagen_url)}
@@ -457,7 +433,7 @@ export default function PublicHome(): JSX.Element {
                       <Badge text={c.estado} />
                     </div>
 
-                    <div className="mt-4 h-28 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
+                    <div className="mt-4 aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
                       {c.imagen_url ? (
                         <img
                           src={resolveImageUrl(c.imagen_url)}
@@ -535,7 +511,7 @@ export default function PublicHome(): JSX.Element {
                 Conoce nuestra experiencia
               </h3>
               <p className="mt-4 text-sm text-white/70">
-                En TechNest Mobile reunimos los últimos smartphones y accesorios de
+                En GYE Mobile reunimos los últimos smartphones y accesorios de
                 marcas globales. Nuestra misión es hacer la tecnología accesible, segura y
                 emocionante para todos.
               </p>
@@ -600,7 +576,7 @@ export default function PublicHome(): JSX.Element {
 
             <div className="relative">
               <div className="absolute -right-10 top-10 h-48 w-48 rounded-full bg-[#16d3c6]/10 blur-3xl" />
-              <div className="relative mx-auto w-full max-w-[360px] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#23262a] to-[#141516] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+              <div className="relative mx-auto aspect-square w-full max-w-[360px] overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#23262a] to-[#141516] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
                 <img
                   src={aboutStorePhone}
                   alt="Smartphone"

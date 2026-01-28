@@ -14,6 +14,15 @@ export default function PublicCelularDetail(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const resolveImageUrl = (value?: string) => {
+    if (!value) return "";
+    if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:")) {
+      return value;
+    }
+    return `${apiBaseUrl}${value}`;
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -107,44 +116,62 @@ export default function PublicCelularDetail(): JSX.Element {
           </div>
         </div>
 
-        <div className="px-8 py-7">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-              <div className="text-xs text-white/55">Color</div>
-              <div className="mt-1 font-semibold text-white/90">{celular.color}</div>
-            </div>
+        <div className="grid gap-8 px-8 py-7 md:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                <div className="text-xs text-white/55">Color</div>
+                <div className="mt-1 font-semibold text-white/90">{celular.color}</div>
+              </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-              <div className="text-xs text-white/55">Almacenamiento</div>
-              <div className="mt-1 font-semibold text-white/90">{celular.almacenamiento}</div>
-            </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                <div className="text-xs text-white/55">Almacenamiento</div>
+                <div className="mt-1 font-semibold text-white/90">{celular.almacenamiento}</div>
+              </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-              <div className="text-xs text-white/55">RAM</div>
-              <div className="mt-1 font-semibold text-white/90">{celular.ram}</div>
-            </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                <div className="text-xs text-white/55">RAM</div>
+                <div className="mt-1 font-semibold text-white/90">{celular.ram}</div>
+              </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-              <div className="text-xs text-white/55">Costo compra</div>
-              <div className="mt-1 font-semibold text-white/90 tabular-nums">
-                ${money(celular.costo_compra)}
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+                <div className="text-xs text-white/55">Costo compra</div>
+                <div className="mt-1 font-semibold text-white/90 tabular-nums">
+                  ${money(celular.costo_compra)}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-6">
-            <div className="text-xs font-semibold tracking-wide text-white/55">
-              Descripción
+            <div className="mt-6">
+              <div className="text-xs font-semibold tracking-wide text-white/55">
+                Descripci??n
+              </div>
+              <p className="mt-3 text-sm text-white/75 leading-relaxed whitespace-pre-wrap">
+                {celular.descripcion}
+              </p>
             </div>
-            <p className="mt-3 text-sm text-white/75 leading-relaxed whitespace-pre-wrap">
-              {celular.descripcion}
-            </p>
+
           </div>
 
-          <div className="mt-6 text-center">
+          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620] p-4">
+            {celular.imagen_url ? (
+              <img
+                src={resolveImageUrl(celular.imagen_url)}
+                alt={`${celular.marca} ${celular.modelo}`}
+                className="h-full w-full object-contain"
+                loading="lazy"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center text-sm text-white/60">
+                Sin imagen
+              </div>
+            )}
+          </div>
+
+          <div className="md:col-span-2">
             <button
               className="w-full rounded-xl bg-blue-600 py-2 font-semibold text-white hover:bg-blue-500 transition"
-              onClick={() => alert("Agregado al carrito")} // Cambia este handler según lógica de carrito
+              onClick={() => alert("Agregado al carrito")} // Cambia este handler seg??n l??gica de carrito
             >
               Agregar al carrito
             </button>
