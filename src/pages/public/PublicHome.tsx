@@ -612,46 +612,6 @@ export default function PublicHome(): JSX.Element {
           </div>
         </div>
       </section>
-
-      <section className="mx-auto max-w-6xl px-4">
-        <div className="rounded-3xl border border-white/10 bg-[#101d22] px-6 py-10 text-white shadow-[0_25px_60px_rgba(0,0,0,0.35)]">
-          <div className="grid gap-6 md:grid-cols-[1.2fr_1fr]">
-            <div>
-              <div className="text-xs uppercase tracking-[0.3em] text-white/50">Contáctanos</div>
-              <h3 className="font-display mt-2 text-2xl font-semibold text-white">
-                ¿Tienes preguntas? Hablemos.
-              </h3>
-              <p className="mt-3 text-sm text-white/60">
-                Escríbenos y un asesor te ayudará a elegir el smartphone ideal.
-              </p>
-            </div>
-            <form
-              className="grid gap-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <div className="grid gap-3 md:grid-cols-2">
-                <input
-                  className="h-11 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/40"
-                  placeholder="Nombre"
-                />
-                <input
-                  className="h-11 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-white/40"
-                  placeholder="Correo"
-                />
-              </div>
-              <textarea
-                className="h-28 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40"
-                placeholder="Tu mensaje"
-              />
-              <button className="h-11 rounded-full bg-[#16d3c6] px-6 text-sm font-semibold text-[#062428] hover:bg-[#22e2d6] transition">
-                Enviar mensaje
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
