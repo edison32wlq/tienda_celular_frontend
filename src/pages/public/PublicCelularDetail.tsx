@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { Link, useParams } from "react-router-dom";
 import { type CelularDto, getCelularById } from "../../services/celulares.service";
 

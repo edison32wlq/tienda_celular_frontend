@@ -19,7 +19,8 @@ export default function Login(): JSX.Element {
     try {
       setError(null);
       await login({ correo, contrasena });
-      navigate(state.from || "/dashboard", { replace: true });
+      // Redirige al dashboard siempre, independientemente de la página anterior
+      navigate("/dashboard", { replace: true });
     } catch {
       setError("Credenciales inválidas o error de servidor.");
     }
@@ -39,34 +40,30 @@ export default function Login(): JSX.Element {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="text-xs font-semibold tracking-wide text-white/60">
-              Correo
-            </label>
-            <input
-              className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
-                         placeholder:text-white/30 focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
-              type="email"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              required
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+        <div>
+          <label className="text-sm font-semibold text-white/70">Correo</label>
+          <input
+            className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
+                       placeholder:text-white/40 focus:ring-2 focus:ring-blue-600/40"
+            type="email"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+            required
+          />
+        </div>
 
-          <div>
-            <label className="text-xs font-semibold tracking-wide text-white/60">
-              Contraseña
-            </label>
-            <input
-              className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 text-sm text-white/90 outline-none
-                         placeholder:text-white/30 focus:border-white/20 focus:ring-4 focus:ring-white/5 transition"
-              type="password"
-              value={contrasena}
-              onChange={(e) => setContrasena(e.target.value)}
-              required
-            />
-          </div>
+        <div>
+          <label className="text-sm font-semibold text-white/70">Contraseña</label>
+          <input
+            className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-transparent px-4 outline-none
+                       placeholder:text-white/40 focus:ring-2 focus:ring-blue-600/40"
+            type="password"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            required
+          />
+        </div>
 
           <button
             type="submit"

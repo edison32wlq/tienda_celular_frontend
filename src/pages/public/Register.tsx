@@ -81,6 +81,7 @@ export default function Register(): JSX.Element {
         estado: true,
       });
 
+      // Después de un registro exitoso, redirige al DashboardHome
       navigate("/dashboard", { replace: true });
     } catch {
       setError("No se pudo registrar. Revisa los datos o intenta más tarde.");
