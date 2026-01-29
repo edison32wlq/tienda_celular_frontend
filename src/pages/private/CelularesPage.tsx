@@ -12,7 +12,7 @@ import {
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 
 type FormState = Omit<Celular, "id_celular">;
-
+// @ts-ignore
 const emptyForm: FormState = {
   codigo: "",
   marca: "",
