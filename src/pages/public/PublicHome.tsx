@@ -209,51 +209,11 @@ export default function PublicHome(): JSX.Element {
 
       <section id="recomendados" className="mx-auto max-w-6xl px-4">
         <div className="flex items-end justify-between">
-          <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-white/40">Recomendado</div>
-            <h2 className="font-display mt-2 text-2xl font-semibold text-white">
-              Selección destacada
-            </h2>
-          </div>
           <a href="#catalogo" className="text-sm text-[#9ef7ef] hover:text-white">
             Ver catálogo
           </a>
         </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-4">
-          {(loading ? Array.from({ length: 4 }) : recommended).map((c, idx) => (
-            <div
-              // @ts-ignore
-              key={c ? c.id_celular : `skeleton-${idx}`}
-              className="group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-[#16d3c6]/60 hover:bg-white/10"
-            >
-              <div className="flex items-center justify-between text-xs text-white/60">
-                <span className="rounded-full bg-white/10 px-2 py-1">New</span>
-                <span>2026</span>
-              </div>
-              <div className="mt-4 aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
-                // @ts-ignore
-                {(c as Celular)?.imagen_url ? (
-                  <img
-                    // @ts-ignore
-                    src={resolveImageUrl(c.imagen_url)}
-                    // @ts-ignore
-                    alt={`${c.marca} ${c.modelo}`}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : null}
-              </div>
-              <div className="mt-4 text-sm text-white/70">
-                // @ts-ignore
-                {c ? `${(c as Celular).marca} ${(c as Celular).modelo}` : "Cargando..."}
-              </div>
-              <div className="mt-1 text-lg font-semibold text-white">
-                // @ts-ignore
-                {c ? `$${money((c as Celular).precio_venta)}` : "$--"}
-              </div>
-            </div>
-          ))}
-        </div>
+        
       </section>
 
       {/* <section className="mx-auto max-w-6xl px-4">
