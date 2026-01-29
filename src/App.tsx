@@ -1,4 +1,4 @@
-import React, { type JSX } from "react";
+import { type JSX } from "react";
 import { useRoutes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { appRoutes } from "./routes/app.routes";
