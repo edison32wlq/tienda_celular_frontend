@@ -1,73 +1,61 @@
-# React + TypeScript + Vite
+# Tienda Celular - DYE
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicacion web para explorar celulares, ver detalles y gestionar compras desde una interfaz publica y un panel privado con autenticacion.
 
-Currently, two official plugins are available:
+## Funciones principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Catalogo publico y detalle de productos
+- Registro e inicio de sesion
+- Carrito y flujo de compra
+- Panel privado para gestion de celulares, compras y perfil
+- Administracion de usuarios (segun permisos/rol del backend)
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + Vite
+- TypeScript
+- Tailwind CSS
+- React Router
+- Axios
 
-## Expanding the ESLint configuration
+## Requisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js (LTS recomendado) y npm
+- Backend API disponible (ver VITE_API_URL)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Instalacion
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Instala dependencias:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Configura variables de entorno (ver seccion correspondiente).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Comandos
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `npm run dev`: servidor de desarrollo
+- `npm run build`: build de produccion
+- `npm run preview`: previsualizar build
+- `npm run lint`: lint
+
+## Variables de entorno
+
+Crea un archivo `.env` en la raiz (o ajusta el existente) con:
+
 ```
+VITE_API_URL=http://localhost:3000
+```
+
+## Credenciales de prueba
+
+No se incluyen credenciales de prueba en el repositorio. Usa el registro en la app o las credenciales que entregue el backend.
+
+## Como conectarse a la API
+
+- El cliente usa Axios con `baseURL` desde `VITE_API_URL`. Si no se define, usa `http://localhost:3000`.
+- Autenticacion:
+  - Login: `POST /auth/login` con `{ correo, contrasena }`
+  - Registro: `POST /auth/register` con `{ id_rol, usuario, contrasena, nombres, apellidos, correo, estado? }`
+- El token se guarda en `localStorage` con la clave `auth_token` y se envia en `Authorization: Bearer <token>` para rutas protegidas.
