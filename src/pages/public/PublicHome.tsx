@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState, type JSX } from "react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getCelulares, type Celular } from "../../services/celulares.service";
 import aboutStorePhone from "../../assets/celular_mano.png";
