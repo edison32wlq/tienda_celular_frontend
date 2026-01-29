@@ -232,7 +232,7 @@ export default function PublicHome(): JSX.Element {
               </div>
               <div className="mt-4 aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c3b46] via-[#10242a] to-[#0b1620]">
                 // @ts-ignore
-                {c?.imagen_url ? (
+                {(c as Celular)?.imagen_url ? (
                   <img
                     // @ts-ignore
                     src={resolveImageUrl(c.imagen_url)}
@@ -245,11 +245,11 @@ export default function PublicHome(): JSX.Element {
               </div>
               <div className="mt-4 text-sm text-white/70">
                 // @ts-ignore
-                {c ? `${c.marca} ${c.modelo}` : "Cargando..."}
+                {c ? `${(c as Celular).marca} ${(c as Celular).modelo}` : "Cargando..."}
               </div>
               <div className="mt-1 text-lg font-semibold text-white">
                 // @ts-ignore
-                {c ? `$${money(c.precio_venta)}` : "$--"}
+                {c ? `$${money((c as Celular).precio_venta)}` : "$--"}
               </div>
             </div>
           ))}
