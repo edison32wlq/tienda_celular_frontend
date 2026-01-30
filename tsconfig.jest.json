@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": false,
+    "jsx": "react-jsx",
+    "types": ["jest", "@testing-library/jest-dom", "node", "vite/client"]
+  },
+  "include": ["src"]
+}
